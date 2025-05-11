@@ -26,8 +26,9 @@ export function isOnCooldown(
 }
 
 export default async function ({ interaction, commandObj }: ValidationProps) {
-	if (!interaction.isChatInputCommand()) return false;
-	const cooldown = commandObj.options?.cooldown ?? 5000;
+	if (!interaction.isChatInputCommand() || !commandObj.options?.cooldown)
+		return false;
+	const cooldown = commandObj.options?.cooldown;
 	const cooldownScope = (commandObj.options?.cooldownScope ??
 		"guild") as CooldownScope;
 	const result = isOnCooldown(
