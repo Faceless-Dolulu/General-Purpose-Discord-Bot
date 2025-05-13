@@ -1,29 +1,6 @@
 import { ValidationProps } from "commandkit";
 import { MessageFlags } from "discord.js";
-type CooldownScope = "guild" | "global";
-type CooldownKey = `${string}:${string}:${string}`;
-export const COOLDOWNS = new Map<CooldownKey, number>();
-export function isOnCooldown(
-	userId: string,
-	commandName: string,
-	cooldownMs: number,
-	scope: CooldownScope,
-	guildId?: string
-): { onCooldown: true; retryAfter: number } | { onCooldown: false } {
-	const id = scope === "guild" ? guildId ?? "global" : userId;
-	const key: CooldownKey = `${scope}:${id}:${commandName}`;
-	const now = Date.now();
-	const expiresAt = COOLDOWNS.get(key);
-	if (expiresAt && now < expiresAt) {
-		return {
-			onCooldown: true,
-			retryAfter: expiresAt - now,
-		};
-	} else {
-		COOLDOWNS.set(key, now + cooldownMs);
-		return { onCooldown: false };
-	}
-}
+import { CooldownScope, isOnCooldown } from "../util/command-on-cooldown.js";
 
 export default async function ({ interaction, commandObj }: ValidationProps) {
 	if (!interaction.isChatInputCommand() || !commandObj.options?.cooldown)
