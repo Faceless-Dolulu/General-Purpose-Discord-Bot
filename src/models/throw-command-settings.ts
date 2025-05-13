@@ -7,7 +7,6 @@ const ThrowConfig = new Schema<ThrowSettings>({
 	customItems: { type: [String], default: [] },
 	cooldown: { type: Number, default: null },
 	customItemsOnly: { type: Boolean, default: false },
-	blacklistedChannels: { type: [String], default: [] },
 });
 
 export default model(`Throw Command Settings`, ThrowConfig);

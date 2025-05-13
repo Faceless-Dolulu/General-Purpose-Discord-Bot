@@ -1,13 +1,9 @@
 import {
 	ActionRowBuilder,
 	ButtonStyle,
-	ChannelType,
 	ContainerBuilder,
-	Interaction,
-	MessageComponentInteraction,
 	SeparatorSpacingSize,
 	ButtonBuilder,
-	ChannelSelectMenuBuilder,
 	MessageActionRowComponentBuilder,
 	SectionBuilder,
 	SeparatorBuilder,
@@ -30,18 +26,11 @@ abstract class CommandSettings {
 
 abstract class FunSettings extends CommandSettings {
 	protected _enabled: boolean;
-	protected _blacklistedChannels: string[];
 	protected _cooldown: number | null;
 
-	constructor(
-		guildId: string,
-		enabled: boolean,
-		blacklistedChannels: string[],
-		cooldown?: number | null
-	) {
+	constructor(guildId: string, enabled: boolean, cooldown?: number | null) {
 		super(guildId);
 		this._enabled = enabled;
-		this._blacklistedChannels = blacklistedChannels;
 		this._cooldown = cooldown ?? null;
 	}
 
@@ -60,14 +49,6 @@ abstract class FunSettings extends CommandSettings {
 	get cooldown(): number | null {
 		return this._cooldown;
 	}
-
-	get blacklistedChannels(): string[] {
-		return this._blacklistedChannels;
-	}
-
-	set blacklistedChannels(values: string[]) {
-		this._blacklistedChannels = values;
-	}
 }
 
 export class ThrowSettings extends FunSettings {
@@ -77,12 +58,11 @@ export class ThrowSettings extends FunSettings {
 	constructor(
 		guildId: string,
 		enabled: boolean,
-		blackListedChannels: string[],
 		cooldown?: number | null,
 		customItems?: string[],
 		customItemsOnly?: boolean
 	) {
-		super(guildId, enabled, blackListedChannels, cooldown);
+		super(guildId, enabled, cooldown);
 		this._customItems = customItems ?? [];
 		this._customItemsOnly = customItemsOnly ?? false;
 	}
@@ -253,10 +233,7 @@ export class ThrowSettings extends FunSettings {
 	 * @param saved Whether changes have been saved or not when this function is called
 	 * @returns container acting as a settings menu
 	 */
-	async createSettingsContainer<
-		T extends Interaction | MessageComponentInteraction
-	>(
-		interaction: T,
+	async createSettingsContainer(
 		config: ThrowSettings,
 		saved: boolean,
 		disabled?: boolean
@@ -269,10 +246,6 @@ export class ThrowSettings extends FunSettings {
 				newSettings.customItemsOnly !== config.customItemsOnly ||
 				newSettings.enabled !== config.enabled ||
 				!arraysEqual(newSettings.customItems, config.customItems) ||
-				!arraysEqual(
-					newSettings.blacklistedChannels,
-					config.blacklistedChannels
-				) ||
 				newSettings.cooldown !== config.cooldown
 			) {
 				return true;
@@ -438,54 +411,6 @@ export class ThrowSettings extends FunSettings {
 			configurationButtons,
 			configurationButtons2,
 		]);
-		let blacklistedChannelsDisplay: TextDisplayBuilder;
-
-		if (
-			this.blacklistedChannels.length === 0 ||
-			this.blacklistedChannels === null
-		) {
-			if (this.blacklistedChannels === null) {
-				const array: string[] = [];
-				blacklistedChannelsDisplay = new TextDisplayBuilder().setContent(
-					arraysEqual(array, config.blacklistedChannels)
-						? (`**Blacklisted Channels:** *None configured*` as string)
-						: (`✨ **Blacklisted Channels:** *None configured*` as string)
-				);
-			} else {
-				blacklistedChannelsDisplay = new TextDisplayBuilder().setContent(
-					arraysEqual(this.blacklistedChannels, config.blacklistedChannels)
-						? (`**Blacklisted Channels:** *None configured*` as string)
-						: (`✨ **Blacklisted Channels:** *None configured*` as string)
-				);
-			}
-		} else {
-			blacklistedChannelsDisplay = new TextDisplayBuilder().setContent(
-				arraysEqual(this.blacklistedChannels, config.blacklistedChannels)
-					? (`**Blacklisted Channels:** ${this.blacklistedChannels
-							.join(`, `)
-							.toString()}` as string)
-					: (`✨ **Blacklisted Channels:** ${this.blacklistedChannels
-							.join(`, `)
-							.toString()}` as string)
-			);
-		}
-		container.addTextDisplayComponents(blacklistedChannelsDisplay);
-
-		container.addActionRowComponents(
-			new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-				new ChannelSelectMenuBuilder()
-					.addChannelTypes(ChannelType.GuildText)
-					.addDefaultChannels(...(this.blacklistedChannels || []))
-					.setCustomId(`blackisted_channels_select`)
-					.setMinValues(0)
-					.setMaxValues(
-						(await interaction.guild?.channels.fetch())?.filter(
-							(channel) => channel?.type === ChannelType.GuildText
-						).size ?? 1
-					)
-					.setDisabled(disabled === true ? true : saved === true ? true : false)
-			)
-		);
 
 		container.addSeparatorComponents(
 			new SeparatorBuilder()
@@ -575,7 +500,6 @@ export class ThrowSettings extends FunSettings {
 			{
 				$set: {
 					customItems: this.customItems,
-					blacklistedChannels: this.blacklistedChannels,
 					customItemsOnly: this.customItemsOnly,
 					enabled: this.enabled,
 					cooldown: this.cooldown,

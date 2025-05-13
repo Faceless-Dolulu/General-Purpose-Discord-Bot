@@ -26,7 +26,6 @@ export async function throwSettingsMenu(
 	const settings = new ThrowSettings(
 		cloneableConfig.guildId,
 		cloneableConfig.enabled,
-		cloneableConfig.blacklistedChannels,
 		cloneableConfig.cooldown,
 		cloneableConfig.customItems,
 		cloneableConfig.customItemsOnly
@@ -238,17 +237,6 @@ export async function throwSettingsMenu(
 					}
 
 					return await updateMenu(config, settings, true, false);
-				default:
-					return await i.reply({
-						content: `⛔ You should not be seeing this message. Please make a bug report in the support server with steps on how to reproduce.`,
-						flags: MessageFlags.Ephemeral,
-					});
-			}
-		} else if (i.isChannelSelectMenu()) {
-			switch (i.customId) {
-				case "blacklisted_channel_select":
-					settings.blacklistedChannels = i.values;
-					return await updateMenu(config, settings, false, false);
 				default:
 					return await i.reply({
 						content: `⛔ You should not be seeing this message. Please make a bug report in the support server with steps on how to reproduce.`,
