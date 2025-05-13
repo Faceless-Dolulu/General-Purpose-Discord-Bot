@@ -32,7 +32,6 @@ export async function throwSettingsMenu(
 	);
 
 	const container = await settings.createSettingsContainer(
-		interaction,
 		config,
 		false,
 		false
@@ -54,7 +53,6 @@ export async function throwSettingsMenu(
 			cancelled?: boolean
 		) {
 			const container = await newSettings.createSettingsContainer(
-				interaction,
 				config,
 				saved,
 				cancelled ?? false
