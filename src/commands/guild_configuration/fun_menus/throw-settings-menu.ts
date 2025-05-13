@@ -219,11 +219,20 @@ export async function throwSettingsMenu(
 				case "cancel":
 					collector.stop(`process_cancelled`);
 					openSettingsMenuCache.delete(i.guildId as string);
-					return await updateMenu(config, settings, false, true);
+
+					await updateMenu(config, settings, false, true);
+					return i.followUp({
+						content: `ℹ️ Process cancelled. Any unsaved changes have been lost.`,
+						flags: MessageFlags.Ephemeral,
+					});
 				case "finished":
 					collector.stop(`process_finished`);
 					openSettingsMenuCache.delete(i.guildId as string);
-					return await updateMenu(config, settings, true, true);
+					await updateMenu(config, settings, true, true);
+					return i.followUp({
+						content: `ℹ️ Process marked as finished. This menu is now locked.`,
+						flags: MessageFlags.Ephemeral,
+					});
 				case "save_changes":
 					try {
 						await settings.saveToDatabase();
