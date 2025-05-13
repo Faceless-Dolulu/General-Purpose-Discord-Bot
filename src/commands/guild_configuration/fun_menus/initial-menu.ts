@@ -13,6 +13,7 @@ import {
 	TextDisplayBuilder,
 } from "discord.js";
 import { funMenuHandlers } from "./menu-router.js";
+import { openSettingsMenuCache } from "../../../util/settings-menu-open.js";
 
 export async function initialFunSettingsMenu<T extends Interaction>(
 	interaction: T
@@ -90,6 +91,7 @@ export async function initialFunSettingsMenu<T extends Interaction>(
 						components: [container],
 						flags: MessageFlags.IsComponentsV2,
 					});
+					openSettingsMenuCache.delete(i.guildId as string);
 					return collector.stop(`cancelled`);
 			}
 		}
@@ -105,6 +107,7 @@ export async function initialFunSettingsMenu<T extends Interaction>(
 			case `time`:
 				row.components.forEach((component) => component.setDisabled(true));
 				container.spliceComponents(2, 1, row).spliceComponents(3, 1);
+				openSettingsMenuCache.delete(interaction.guildId as string);
 				await menu.edit({
 					components: [container],
 					flags: MessageFlags.IsComponentsV2,

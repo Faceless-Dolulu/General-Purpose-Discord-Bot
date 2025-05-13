@@ -8,6 +8,7 @@ import { ThrowSettings } from "../../../classes/command-settings.js";
 import { initialFunSettingsMenu } from "./initial-menu.js";
 import { normalizeTimeUnit } from "../../../functions/normalize-time-units.js";
 import ms from "ms";
+import { openSettingsMenuCache } from "../../../util/settings-menu-open.js";
 
 export async function throwSettingsMenu(
 	interaction: MessageComponentInteraction
@@ -220,9 +221,11 @@ export async function throwSettingsMenu(
 					return initialFunSettingsMenu(i);
 				case "cancel":
 					collector.stop(`process_cancelled`);
+					openSettingsMenuCache.delete(i.guildId as string);
 					return await updateMenu(config, settings, false, true);
 				case "finished":
 					collector.stop(`process_finished`);
+					openSettingsMenuCache.delete(i.guildId as string);
 					return await updateMenu(config, settings, true, true);
 				case "save_changes":
 					try {

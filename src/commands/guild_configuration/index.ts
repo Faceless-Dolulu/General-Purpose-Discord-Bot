@@ -5,6 +5,7 @@ import {
 } from "discord.js";
 import funCommands from "./fun-commands.js";
 import { SlashCommandProps } from "commandkit";
+import { openSettingsMenuCache } from "../../util/settings-menu-open.js";
 
 export const data = new SlashCommandBuilder()
 	.setName(`configuration`)
@@ -19,7 +20,7 @@ export const data = new SlashCommandBuilder()
 
 export async function run({ interaction }: SlashCommandProps) {
 	const command = interaction.options.getSubcommand();
-
+	openSettingsMenuCache.set(interaction.guildId as string, true);
 	switch (command) {
 		case "fun":
 			return funCommands.run(interaction);
