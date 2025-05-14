@@ -13,7 +13,7 @@ import prettyMilliseconds from "pretty-ms";
 import { arraysEqual } from "../util/arrays-equal.js";
 import throwCommandSettings from "../models/throw-command-settings.js";
 
-abstract class CommandSettings {
+export abstract class CommandSettings {
 	protected _guildId: string;
 	constructor(guildId: string) {
 		this._guildId = guildId;
@@ -24,7 +24,7 @@ abstract class CommandSettings {
 	}
 }
 
-abstract class FunSettings extends CommandSettings {
+export abstract class FunSettings extends CommandSettings {
 	protected _enabled: boolean;
 	protected _cooldown: number | null;
 

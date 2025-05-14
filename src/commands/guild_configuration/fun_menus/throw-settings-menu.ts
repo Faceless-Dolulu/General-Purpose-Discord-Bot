@@ -9,6 +9,10 @@ import { initialFunSettingsMenu } from "./initial-menu.js";
 import { normalizeTimeUnit } from "../../../functions/normalize-time-units.js";
 import ms from "ms";
 import { openSettingsMenuCache } from "../../../util/settings-menu-open.js";
+import {
+	commandSettingsCache,
+	CommandSettingsKey,
+} from "../../../util/command-settings-cache.js";
 
 export async function throwSettingsMenu(
 	interaction: MessageComponentInteraction
@@ -236,6 +240,8 @@ export async function throwSettingsMenu(
 				case "save_changes":
 					try {
 						await settings.saveToDatabase();
+						const key: CommandSettingsKey = `${interaction.guildId}:throw-command`;
+						commandSettingsCache.set(key, settings);
 					} catch (error) {
 						return await i.reply({
 							content: `⚠️ An error has occurred. Please try again.`,
