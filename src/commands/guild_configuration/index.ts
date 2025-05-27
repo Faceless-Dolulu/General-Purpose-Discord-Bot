@@ -6,6 +6,7 @@ import {
 import funCommands from "./fun-commands.js";
 import { SlashCommandProps } from "commandkit";
 import { openSettingsMenuCache } from "../../util/settings-menu-open.js";
+import moderationCommands from "./moderation-commands.js";
 
 export const data = new SlashCommandBuilder()
 	.setName(`configuration`)
@@ -16,6 +17,11 @@ export const data = new SlashCommandBuilder()
 		command
 			.setName(`fun`)
 			.setDescription(`Configure fun command settings for your server`)
+	)
+	.addSubcommand((command) =>
+		command
+			.setName(`moderation`)
+			.setDescription(`Configure moderation command settings for your server`)
 	);
 
 export async function run({ interaction }: SlashCommandProps) {
@@ -24,5 +30,7 @@ export async function run({ interaction }: SlashCommandProps) {
 	switch (command) {
 		case "fun":
 			return funCommands.run(interaction);
+		case "moderation":
+			return moderationCommands.run(interaction);
 	}
 }
