@@ -39,7 +39,7 @@ export async function initialModerationSettingsMenu<T extends Interaction>(
 		.setStyle(ButtonStyle.Secondary);
 
 	let menu;
-	const container = new ContainerBuilder();
+	const container = new ContainerBuilder().setAccentColor([0, 170, 255]);
 	const title = new TextDisplayBuilder().setContent(
 		`# Moderation Command Configuration\n\nSelect which command you want to configure below:`
 	);
