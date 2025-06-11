@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { TimeoutSettings } from "../classes/command-settings.js";
+import { TimeoutSettings } from "../classes/timeout-settings.js";
 
 const TimeoutConfig = new Schema<TimeoutSettings>({
 	guildId: {
