@@ -4,7 +4,7 @@ import {
 	TextChannel,
 } from "discord.js";
 import ThrowConfig from "../../../models/throw-command-settings.js";
-import { ThrowSettings } from "../../../classes/command-settings.js";
+import { ThrowSettings } from "../../../classes/throw-settings.js";
 import { initialFunSettingsMenu } from "./initial-menu.js";
 import { normalizeTimeUnit } from "../../../functions/normalize-time-units.js";
 import ms from "ms";

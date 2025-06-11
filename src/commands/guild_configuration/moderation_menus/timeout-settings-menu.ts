@@ -4,7 +4,7 @@ import {
 	TextChannel,
 } from "discord.js";
 import timeoutCommandSettings from "../../../models/timeout-command-settings.js";
-import { TimeoutSettings } from "../../../classes/command-settings.js";
+import { TimeoutSettings } from "../../../classes/timeout-settings.js";
 import { normalizeTimeUnit } from "../../../functions/normalize-time-units.js";
 import ms from "ms";
 import { initialModerationSettingsMenu } from "./initial-menu.js";

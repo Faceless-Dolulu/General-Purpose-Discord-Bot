@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { ThrowSettings } from "../classes/command-settings.js";
+import { ThrowSettings } from "../classes/throw-settings.js";
 
 const ThrowConfig = new Schema<ThrowSettings>({
 	guildId: { type: String, required: true, unique: true },

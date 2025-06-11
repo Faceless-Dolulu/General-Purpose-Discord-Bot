@@ -6,7 +6,7 @@ import {
 	SlashCommandBuilder,
 	userMention,
 } from "discord.js";
-import { ThrowSettings } from "../../../classes/command-settings.js";
+import { ThrowSettings } from "../../../classes/throw-settings.js";
 import {
 	commandSettingsCache,
 	CommandSettingsKey,
