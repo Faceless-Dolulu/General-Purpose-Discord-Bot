@@ -95,7 +95,7 @@ export class TimeoutSettings extends ModerationSettings {
 		if (properties?.saved === true) {
 			title = `## Timeout Command Configuration (Changes Saved)` as string;
 		} else if (this.hasChanges(config) === true) {
-			title = `## Timeout Command Configuration (Changes unsaved)` as string;
+			title = `## Timeout Command Configuration (Changes Unsaved)` as string;
 		} else {
 			title = `## Timeout Command Configuration` as string;
 		}
