@@ -4,6 +4,7 @@ import {
 	ChannelSelectMenuBuilder,
 	ChannelType,
 	ContainerBuilder,
+	roleMention,
 	RoleSelectMenuBuilder,
 	SeparatorBuilder,
 	SeparatorSpacingSize,
@@ -16,6 +17,7 @@ import muteCommandSettings from "../models/mute-command-settings.js";
 import prettyMilliseconds from "pretty-ms";
 import { createSelectMenu } from "../util/select-menu-builder.js";
 import { createButton } from "../util/button-builder.js";
+import { client } from "../index.js";
 
 export class MuteSettings extends ModerationSettings {
 	private _defaultDuration: number;
@@ -121,6 +123,30 @@ export class MuteSettings extends ModerationSettings {
 			settingsDisplay.push(`**Default Duration:** ${duration}` as string);
 		}
 
+		const roleExists =
+			(await (await client.guilds.fetch(this.guildId)).roles.fetch()).filter(
+				(role) => role.id === this.muteRoleId
+			).size === 1
+				? true
+				: false;
+		if (this.muteRoleId !== null && roleExists) {
+			if (this.muteRoleId !== config.muteRoleId) {
+				settingsDisplay.push(
+					`✨ **Mute Role:** ${roleMention(this.muteRoleId)}`
+				);
+			} else {
+				settingsDisplay.push(`**Mute Role:** ${roleMention(this.muteRoleId)}`);
+			}
+		} else if (this.muteRoleId === null) {
+			settingsDisplay.push(
+				`**Mute Role:** *No role has been assigned. Please assign a role in order to enable this command.*`
+			);
+		} else if (!roleExists && this.muteRoleId !== null) {
+			settingsDisplay.push(
+				`**Mute Role:** *Previously assigned role no longer exists. Please assign a role in order to enable this command again.*`
+			);
+		}
+
 		settingsDisplaySection.setContent(settingsDisplay.join("\n\n") as string);
 
 		container.spliceComponents(0, 1, settingsDisplaySection);
@@ -154,8 +180,7 @@ export class MuteSettings extends ModerationSettings {
 							: false,
 					maxValues: 1,
 					minValues: 1,
-					placeholder: `Select the role to give on mute`,
-					defaultValues: this.muteRoleId !== null ? this.muteRoleId : null,
+					placeholder: `Select the new role to give on mute`,
 				}) as RoleSelectMenuBuilder
 			)
 		);
@@ -175,7 +200,9 @@ export class MuteSettings extends ModerationSettings {
 				label: `Toggle Enabled Status`,
 				emoji: "🔁",
 				disabled:
-					properties?.disabled === true || properties?.saved === true
+					properties?.disabled === true ||
+					properties?.saved === true ||
+					this.muteRoleId === null
 						? true
 						: false,
 			}),
