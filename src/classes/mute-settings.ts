@@ -202,7 +202,8 @@ export class MuteSettings extends ModerationSettings {
 				disabled:
 					properties?.disabled === true ||
 					properties?.saved === true ||
-					this.muteRoleId === null
+					this.muteRoleId === null ||
+					!roleExists
 						? true
 						: false,
 			}),
