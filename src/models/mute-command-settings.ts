@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
+import { MuteSettings } from "../classes/mute-settings.js";
 
-const MuteConfig = new Schema({
+const MuteConfig = new Schema<MuteSettings>({
 	guildId: {
 		type: String,
 		required: true,
