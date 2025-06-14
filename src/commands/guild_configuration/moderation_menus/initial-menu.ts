@@ -22,6 +22,10 @@ export async function initialModerationSettingsMenu<T extends Interaction>(
 			label: `Timeout Command`,
 			value: `timeout-command`,
 		},
+		{
+			label: `Mute Command`,
+			value: `mute-command`,
+		},
 	];
 
 	const selectMenu = new StringSelectMenuBuilder()
