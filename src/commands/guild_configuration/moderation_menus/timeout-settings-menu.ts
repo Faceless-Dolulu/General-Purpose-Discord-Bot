@@ -127,7 +127,7 @@ export async function timeoutSettingsMenu(
 							}
 							if (seenUnits.has(normalizedUnit)) {
 								await m.delete();
-								return interaction.followUp({
+								return await interaction.followUp({
 									content: `⚠️ You've specified the \`${normalizedUnit}\` unit multiple times. Please use each time unit only once.`,
 									flags: MessageFlags.Ephemeral,
 								});
@@ -135,6 +135,12 @@ export async function timeoutSettingsMenu(
 							seenUnits.add(normalizedUnit);
 							const duration = ms(match[2] + normalizedUnit);
 							totalDuration += duration;
+							if (totalDuration > ms(`28 Days`)) {
+								return await interaction.followUp({
+									content: `⚠️ Default timeout duration exceeds Discord's 28 day limit. Consider configuring the \`/mute\` command`,
+									flags: MessageFlags.Ephemeral,
+								});
+							}
 						}
 
 						settings.defaultDuration = totalDuration;
