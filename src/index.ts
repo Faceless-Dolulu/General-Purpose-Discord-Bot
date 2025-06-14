@@ -4,7 +4,7 @@ import path from "path";
 import { S3Client } from "@aws-sdk/client-s3";
 import "dotenv/config";
 import mongoose from "mongoose";
-const client = new Client({
+export const client = new Client({
 	intents: [
 		IntentsBitField.Flags.Guilds,
 		IntentsBitField.Flags.MessageContent,
