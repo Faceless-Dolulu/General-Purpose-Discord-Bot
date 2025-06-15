@@ -26,6 +26,10 @@ export async function initialModerationSettingsMenu<T extends Interaction>(
 			label: `Mute Command`,
 			value: `mute-command`,
 		},
+		{
+			label: `Kick Command`,
+			value: `kick-command`,
+		},
 	];
 
 	const selectMenu = new StringSelectMenuBuilder()
