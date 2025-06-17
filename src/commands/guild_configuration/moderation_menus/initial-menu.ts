@@ -30,6 +30,10 @@ export async function initialModerationSettingsMenu<T extends Interaction>(
 			label: `Kick Command`,
 			value: `kick-command`,
 		},
+		{
+			label: `Ban Command`,
+			value: `ban-command`,
+		},
 	];
 
 	const selectMenu = new StringSelectMenuBuilder()
