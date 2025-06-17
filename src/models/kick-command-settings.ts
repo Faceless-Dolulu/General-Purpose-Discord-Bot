@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
+import { KickSettings } from "../classes/kick-settings.js";
 
-const KickConfig = new Schema({
+const KickConfig = new Schema<KickSettings>({
 	guildId: {
 		type: String,
 		required: true,
