@@ -262,6 +262,11 @@ export async function throwSettingsMenu(
 	collector.on(`end`, async () => {
 		switch (collector.endReason) {
 			case "time":
+				await interaction.editReply({
+					components: [
+						await settings.createSettingsContainer(config, false, true),
+					],
+				});
 				return await interaction.followUp({
 					content: `ℹ️ Menu timed out. Any unsaved changes have been lost.`,
 					flags: MessageFlags.Ephemeral,
