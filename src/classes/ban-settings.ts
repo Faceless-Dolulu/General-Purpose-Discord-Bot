@@ -102,7 +102,7 @@ export class BanSettings extends ModerationSettings {
 					maxValues: 1,
 					minValues: 0,
 					channelTypes: ChannelType.GuildText,
-					placeholder: `Select a log channel for mute actions`,
+					placeholder: `Select a log channel for ban actions`,
 					defaultValues: config.logChannelId ? [config.logChannelId] : [],
 				}) as ChannelSelectMenuBuilder
 			)
