@@ -218,20 +218,18 @@ export async function throwSettingsMenu(
 					});
 					return;
 				case "prev_page":
-					collector.stop();
+					collector.stop(`return_to_prev_menu`);
 					return initialFunSettingsMenu(i);
 				case "cancel":
-					collector.stop(`process_cancelled`);
-					openSettingsMenuCache.delete(i.guildId as string);
-
+					collector.stop(`process_finished`);
 					await updateMenu(config, settings, false, true);
 					return i.followUp({
 						content: `ℹ️ Process cancelled. Any unsaved changes have been lost.`,
 						flags: MessageFlags.Ephemeral,
 					});
+
 				case "finished":
 					collector.stop(`process_finished`);
-					openSettingsMenuCache.delete(i.guildId as string);
 					await updateMenu(config, settings, true, true);
 					return i.followUp({
 						content: `ℹ️ Process marked as finished. This menu is now locked.`,
@@ -259,5 +257,31 @@ export async function throwSettingsMenu(
 		} else {
 			return;
 		}
+	});
+
+	collector.on(`end`, async () => {
+		switch (collector.endReason) {
+			case "time":
+				return await interaction.followUp({
+					content: `ℹ️ Menu timed out. Any unsaved changes have been lost.`,
+					flags: MessageFlags.Ephemeral,
+				});
+			case "process_finished":
+				return openSettingsMenuCache.delete(interaction.guildId as string);
+			case "return_to_prev_menu":
+				return;
+			default:
+				return await interaction.followUp({
+					content: `⚠️ You should not be seeing this message. Please make a bug report in the support server.`,
+					flags: MessageFlags.Ephemeral,
+				});
+		}
+	});
+
+	collector.on(`ignore`, async (i) => {
+		await i.reply({
+			content: `❌ This menu is not for you.`,
+			flags: MessageFlags.Ephemeral,
+		});
 	});
 }
